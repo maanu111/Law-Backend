@@ -3,6 +3,9 @@ const router = express.Router();
 
 const formLetterController = require("../controllers/formLetterController");
 
+// Search templates with wildcard support (for form navigation)
+router.post("/templates/search", formLetterController.searchFormLetters);
+
 // Create a template
 router.post("/templates/create", formLetterController.createFormLetter);
 
