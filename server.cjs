@@ -11,6 +11,7 @@ const plaintiffRoutes = require("./routes/plaintiffRoutes");
 const defendantRoutes = require("./routes/defendantRoutes");
 const placeholderRoutes = require("./routes/placeholderRoutes");
 const formLetterRoutes = require("./routes/formLetterRoutes");
+const formCategoryRoutes = require("./routes/formCategoryRoutes");
 dotenv.config();
 
 const app = express();
@@ -25,6 +26,7 @@ app.use("/api/plaintiff", plaintiffRoutes);
 app.use("/api/defendant", defendantRoutes);
 app.use("/api/placeholders", placeholderRoutes);
 app.use("/api/form-letters", formLetterRoutes);
+app.use("/api/form-categories", formCategoryRoutes);
 const PORT = process.env.PORT || 4000;
 const MONGO_URI = process.env.MONGO_URI;
 
