@@ -16,7 +16,7 @@ exports.createUser = async (req, res) => {
       must_change_password,
     } = req.body;
 
-    if (!user_id || !password || !email_address) {
+    if (!user_id) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
@@ -132,5 +132,75 @@ exports.deleteUser = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+exports.bulkImportUsers = async (req, res) => {
+  try {
+    const { users } = req.body;
+
+    if (!users || !Array.isArray(users) || users.length === 0) {
+      return res.status(400).json({
+        status_code: 400,
+        message: "No user data provided",
+      });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const defaultHashedPassword = await bcrypt.hash("ChangeMe123", salt);
+
+    let imported = 0;
+    let updated = 0;
+    let failed = 0;
+
+    for (const user of users) {
+      try {
+        const existing = await User.findOne({ user_id: user.user_id });
+
+        if (existing) {
+          await User.findOneAndUpdate(
+            { user_id: user.user_id },
+            {
+              first_name: user.first_name,
+              last_name: user.last_name || "",
+              email_address: user.email_address,
+              mobile_number: user.mobile_number || "",
+              roles: user.roles || [],
+              disabled_yn: user.disabled_yn || "N",
+              must_change_password: user.must_change_password || "Y",
+            }
+          );
+          updated++;
+        } else {
+          await User.create({
+            user_id: user.user_id,
+            password: defaultHashedPassword,
+            first_name: user.first_name,
+            last_name: user.last_name || "",
+            email_address: user.email_address,
+            mobile_number: user.mobile_number || "",
+            roles: user.roles || [],
+            disabled_yn: user.disabled_yn || "N",
+            must_change_password: user.must_change_password || "Y",
+          });
+          imported++;
+        }
+      } catch (err) {
+        failed++;
+        console.log(`Failed: ${user.user_id} - ${err.message}`);
+      }
+    }
+
+    res.status(200).json({
+      status_code: 200,
+      message: `Imported ${imported} new users, updated ${updated} existing users${
+        failed > 0 ? `, ${failed} failed` : ""
+      }`,
+      data: { imported, updated, failed },
+    });
+  } catch (error) {
+    res.status(400).json({
+      status_code: 400,
+      message: error.message,
+    });
   }
 };

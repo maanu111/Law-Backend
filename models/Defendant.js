@@ -2,21 +2,17 @@ const mongoose = require("mongoose");
 
 const defendantSchema = new mongoose.Schema(
   {
-    atty_id: { type: String, required: true, unique: true },
-    full_name: { type: String, required: true },
-    law_firm: { type: String },
-    address1: { type: String },
-    address2: { type: String },
-    city: { type: String },
-    state: { type: String },
-    zip: { type: String },
-    phone_no: { type: String },
-    fax_no: { type: String },
-    email: { type: String },
-    last_user: {
-      user_id: { type: String },
-      updated_at: { type: Date, default: Date.now },
-    },
+    ATTY_ID: { type: String, required: true, unique: true },
+    ATTY_FULL_NAME: { type: String, required: true },
+    ATTY_LAW_FIRM: { type: String },
+    ATTY_ADDRESS1: { type: String },
+    ATTY_ADDRESS2: { type: String },
+    ATTY_CITY: { type: String },
+    ATTY_STATE: { type: String },
+    ATTY_ZIP: { type: String },
+    PHONE_NO: { type: String },
+    FAX_NO: { type: String },
+    EMAIL: { type: String },
   },
   { timestamps: true }
 );

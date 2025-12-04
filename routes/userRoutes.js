@@ -5,6 +5,7 @@ const {
   viewUser,
   updateUser,
   deleteUser,
+  bulkImportUsers,
 } = require("../controllers/userController");
 const { protect } = require("../middleware/authMiddleware");
 
@@ -15,7 +16,7 @@ router.patch("/list-all", listAllUsers);
 router.get("/view/:id", viewUser);
 router.put("/update/:id", updateUser);
 router.delete("/delete/:id", deleteUser);
-
+router.post("/bulk-import", bulkImportUsers);
 // Optional protected test route
 router.get("/profile", protect, (req, res) => {
   res.json({ message: "Access granted", user: req.user });

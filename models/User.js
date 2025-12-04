@@ -5,9 +5,9 @@ const userSchema = new mongoose.Schema(
   {
     user_id: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    first_name: { type: String, required: true },
+    first_name: { type: String, required: false },
     last_name: { type: String },
-    email_address: { type: String, required: true, unique: true },
+    email_address: { type: String, required: false, sparse: true, default: "" },
     mobile_number: { type: String },
     roles: [{ type: String }],
     disabled_yn: { type: String, enum: ["Y", "N"], default: "N" },
